@@ -4,7 +4,7 @@
 [![Installs](https://img.shields.io/vscode-marketplace/d/hammster1911.twitch-chat.svg)](https://marketplace.visualstudio.com/items?itemName=hammster1911.twitch-chat)
 [![Rating](https://img.shields.io/vscode-marketplace/r/hammster1911.twitch-chat.svg)](https://marketplace.visualstudio.com/items?itemName=hammster1911.twitch-chat)
 
-![Logo](https://raw.githubusercontent.com/Hammster/twitch-chat/master/media/twitchChat.svg "twitch-chat extension logo")
+![Logo](https://raw.githubusercontent.com/Hammster/twitch-chat/master/media/twitchChat.png "twitch-chat extension logo")
 
 ## Features
 
