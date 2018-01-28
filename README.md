@@ -9,7 +9,7 @@
 Adds a Chat log to the Explorer view
 Send chat messages without leaving VScode
 
-![Screenshot](https://github.com/hammster1911/twitch-chat/raw/master/media/example.png "Screenshot showing the twitch-chat extension")
+![Screenshot](https://raw.githubusercontent.com/Hammster/twitch-chat/master/media/example.jpg "Screenshot showing the twitch-chat extension")
 
 
 ## Extension Settings
