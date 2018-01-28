@@ -9,14 +9,14 @@
 Adds a Chat log to the Explorer view
 Send chat messages without leaving VScode
 
-![Screenshot](https://github.com/hammster1911/twitch-chat/raw/master/src/media/example.png "Screenshot showing the twitch-chat extension")
+![Screenshot](https://github.com/hammster1911/twitch-chat/raw/master/media/example.png "Screenshot showing the twitch-chat extension")
 
 
 ## Extension Settings
 
 These settings have to be 
 
-```json
+```js
 {
   // Generate a token here: http://www.twitchapps.com/tmi
   "twitchChat.oauth": "************",
