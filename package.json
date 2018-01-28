@@ -1,0 +1,83 @@
+{
+	"name": "twitch-chat",
+	"displayName": "Twitch Chat",
+	"description": "VS code Extension for Twitch Chat Integration",
+	"version": "0.1.0",
+	"publisher": "hammster1911",
+	"engines": {
+		"vscode": "^1.13.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onView:twitchChat"
+	],
+	"main": "./out/src/extension",
+	"icon": "media/twitchChat.png",
+	"contributes": {
+		"views": {
+			"explorer": [{
+				"id": "twitchChat",
+				"name": "Twitch Chat"
+			}]
+		},
+		"commands": [{
+			"command": "twitchChat.sendMessage",
+			"title": "Twitch Chat: Send Chat message",
+			"icon": {
+				"dark": "resources/dark/string.svg",
+				"light": "resources/light/string.svg"
+			}
+		}],
+		"configuration": {
+			"type": "object",
+			"title": "Example configuration",
+			"properties": {
+				"twitchChat.historysize": {
+					"type": "number",
+					"default": 20,
+					"description": "Amount of chatmessages that are keept in cache for the sesssion"
+				},
+				"twitchChat.oauth": {
+					"type": "string",
+					"default": "",
+					"description": "DONT SHOW THIS IN STREAM!!!!, Your twitch token, Generate a token here: http://www.twitchapps.com/tmi"
+				},
+				"twitchChat.username": {
+					"type": "string",
+					"default": "",
+					"description": "Your Twitch username."
+				},
+				"twitchChat.channel": {
+					"type": "string",
+					"default": "",
+					"description": "The channel name. For Twitch, use [your channel/user name] without a hashtag."
+				}
+			}
+		},
+		"menus": {
+			"view/title": [
+				{
+					"command": "twitchChat.sendMessage",
+					"when": "view == twitchChat",
+					"group": "navigation",
+					"tile": "test"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "tsc -p ./",
+		"compile": "tsc -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install"
+	},
+	"devDependencies": {
+		"@types/node": "9.4.0",
+		"typescript": "^2.6.2",
+		"vscode": "^1.1.10"
+	},
+	"dependencies": {
+		"twitch-bot": "^1.2.2"
+	}
+}
