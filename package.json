@@ -4,6 +4,10 @@
 	"description": "VS code Extension for Twitch Chat Integration",
 	"version": "0.1.0",
 	"publisher": "hammster1911",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Hammster/twitch-chat.git"
+	},
 	"engines": {
 		"vscode": "^1.13.0"
 	},
