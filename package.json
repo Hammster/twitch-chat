@@ -2,7 +2,7 @@
 	"name": "twitch-chat",
 	"displayName": "Twitch Chat",
 	"description": "VS code Extension for Twitch Chat Integration",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"publisher": "hammster1911",
 	"repository": {
 		"type": "git",
@@ -32,6 +32,22 @@
 			"icon": {
 				"dark": "resources/dark/string.svg",
 				"light": "resources/light/string.svg"
+			}
+		},
+		{
+			"command": "twitchChat.openActiveStream",
+			"title": "Twitch Chat: Open active stream",
+			"icon": {
+				"dark": "resources/dark/link.svg",
+				"light": "resources/light/link.svg"
+			}
+		},
+		{
+			"command": "twitchChat.changeChannel",
+			"title": "Twitch Chat: Change selected channel",
+			"icon": {
+				"dark": "resources/dark/link.svg",
+				"light": "resources/light/link.svg"
 			}
 		}],
 		"configuration": {
@@ -65,8 +81,12 @@
 				{
 					"command": "twitchChat.sendMessage",
 					"when": "view == twitchChat",
-					"group": "navigation",
-					"tile": "test"
+					"group": "navigation"
+				},
+				{
+					"command": "twitchChat.openActiveStream",
+					"when": "view == twitchChat",
+					"group": "navigation"
 				}
 			]
 		}

@@ -12,6 +12,8 @@ export function activate(context: vscode.ExtensionContext) {
 	const username = config.username
 	const oauth = config.oauth
 	let joined = false
+	let activeChannel = channel
+
 
 	if (channel && username && oauth) {
 		const bot = new twitchBot({
@@ -23,8 +25,8 @@ export function activate(context: vscode.ExtensionContext) {
 		bot.on('join', () => {
 			if (!joined) {
 				joined = true
-				bot.on('message', (x) => {
-					twitchChatProvider.addItem(x)
+				bot.on('message', (chatter) => {
+					twitchChatProvider.addItem(chatter)
 				})
 			}
 		})
@@ -34,12 +36,26 @@ export function activate(context: vscode.ExtensionContext) {
 		})
 
 		vscode.commands.registerCommand('twitchChat.sendMessage', () => {
-			vscode.window.showInputBox({ prompt: "Enter a Chat message" }).then((x) => {
-				if(x) {
-					bot.say(x)
-					twitchChatProvider.addItem({message:x, username:username})
+			vscode.window.showInputBox({ prompt: "Enter a Chat message" }).then((message) => {
+				if(message) {
+					bot.say(message)
+					twitchChatProvider.addItem({message:message, username:username})
 				}
 			})
+		})
+
+		vscode.commands.registerCommand('twitchChat.changeChannel', () => {
+			vscode.window.showInputBox({ prompt: "Enter a channelname" }).then((newChannel) => {
+				if(newChannel) {
+					bot.part(channel)
+					bot.join(newChannel)
+					activeChannel = newChannel
+				}
+			})
+		})
+
+		vscode.commands.registerCommand('twitchChat.openActiveStream', () => {
+			vscode.commands.executeCommand('vscode.open', vscode.Uri.parse('https://www.twitch.tv/' + activeChannel))
 		})
 
 		vscode.window.registerTreeDataProvider('twitchChat', twitchChatProvider)
