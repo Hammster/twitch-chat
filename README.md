@@ -30,10 +30,7 @@ These settings have to be
 ```
 ## Known Issues
 
+Most of these issues are because of VS code extension API limitations.
+
 - The Chatlogs are limited to a set height, therefore text is cut off and you have to read the content by hovering the entry
 - Chat emotes are not displayed
-
-## Planned feature
-
-- Channel switching
-- Highlight mentions of the configured username

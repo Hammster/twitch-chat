@@ -2,7 +2,7 @@
 	"name": "twitch-chat",
 	"displayName": "Twitch Chat",
 	"description": "VS code Extension for Twitch Chat Integration",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"publisher": "hammster1911",
 	"repository": {
 		"type": "git",
