@@ -3,6 +3,35 @@
 import * as vscode from 'vscode'
 import { TwitchChatProvider } from './twitchChat'
 import * as twitchBot from 'twitch-bot'
+import * as https from 'https'
+import * as EventEmitter from 'events'
+
+class TwitchChatEventEmitter extends EventEmitter {}
+const twitchChatEventEmitter = new TwitchChatEventEmitter();
+
+function getStreamData(channel) {
+	https.get({
+		'host': 'api.twitch.tv',
+		'path': '/kraken/streams/' + channel,
+		'port': 443,
+		'method': 'GET',
+		'headers': {
+			// This is limited to a certain amount of requests, 
+			// if the plugin gets to popular we need a config to set a custom Client-ID
+			'Client-ID': 't4z7hvfvcrgmfrg9xtmed66ihiwk3d'
+		}
+	}, res => {
+		res.setEncoding('utf8');
+		let body = '';
+		res.on('data', data => {
+			body += data;
+		})
+		res.on('end', () => {
+			twitchChatEventEmitter.emit('streamDataUpdate', JSON.parse(body));
+			return JSON.parse(body)
+		})
+	})
+}
 
 export function activate(context: vscode.ExtensionContext) {
 	const rootPath = vscode.workspace.rootPath
@@ -13,7 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
 	const oauth = config.oauth
 	let joined = false
 	let activeChannel = channel
-
+	let streamData = getStreamData(activeChannel)
 
 	if (channel && username && oauth) {
 		const bot = new twitchBot({
@@ -31,25 +60,30 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		})
 
-		bot.on("error", err => {
+		bot.on('error', err => {
 			vscode.window.showErrorMessage(err)
 		})
 
+		twitchChatEventEmitter.on('streamDataUpdate', (newStreamData) => {
+			twitchChatProvider.connectToChannel(activeChannel, newStreamData)
+		})
+
 		vscode.commands.registerCommand('twitchChat.sendMessage', () => {
-			vscode.window.showInputBox({ prompt: "Enter a Chat message" }).then((message) => {
-				if(message) {
+			vscode.window.showInputBox({ prompt: 'Enter a Chat message' }).then((message) => {
+				if (message) {
 					bot.say(message)
-					twitchChatProvider.addItem({message:message, username:username})
+					twitchChatProvider.addItem({ message: message, username: username })
 				}
 			})
 		})
 
 		vscode.commands.registerCommand('twitchChat.changeChannel', () => {
-			vscode.window.showInputBox({ prompt: "Enter a channelname" }).then((newChannel) => {
-				if(newChannel) {
+			vscode.window.showInputBox({ prompt: 'Enter a channelname' }).then((newChannel) => {
+				if (newChannel) {
 					bot.part(channel)
 					bot.join(newChannel)
 					activeChannel = newChannel
+					streamData = getStreamData(newChannel)
 				}
 			})
 		})

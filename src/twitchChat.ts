@@ -8,15 +8,25 @@ export class TwitchChatProvider implements vscode.TreeDataProvider<ChatEntry> {
 	readonly onDidChangeTreeData: vscode.Event<ChatEntry | undefined> = this._onDidChangeTreeData.event
 	public chatlog = [];
 
-	constructor(private workspaceRoot: string, private config: vscode.WorkspaceConfiguration) {}
+	constructor(private workspaceRoot: string, private config: vscode.WorkspaceConfiguration) { }
 
-	addItem(chatLogObject): void {
-		this.chatlog.push(new ChatEntry(this.formatMessage(chatLogObject), vscode.TreeItemCollapsibleState.None))
+	addItem(chatLogObjectOrString): void {
+		const message = typeof (chatLogObjectOrString) === 'object' ? this.formatMessage(chatLogObjectOrString) : chatLogObjectOrString
+		this.chatlog.push(new ChatEntry(message, vscode.TreeItemCollapsibleState.None))
+		this.refresh()
+	}
+
+	connectToChannel(channel, streamData): void {
+		const channelName = streamData.stream ? streamData.stream.channel.display_name : channel
+		this.chatlog.push(new ChatEntry('>>>>>>> JOINED: ' + channelName + ' [' + (streamData.stream ? 'online' : 'offline') + ']', vscode.TreeItemCollapsibleState.None))
+		this.refresh()
+	}
+
+	sliceChat(): void {
 		if (this.chatlog.length > this.config.historysize) {
 			const tempArray: Array<ChatEntry> = this.chatlog.slice().reverse()
 			this.chatlog = tempArray.slice(0, this.config.historysize).reverse();
 		}
-		this.refresh()
 	}
 
 	formatMessage(chatlogObject): string {
@@ -24,6 +34,7 @@ export class TwitchChatProvider implements vscode.TreeDataProvider<ChatEntry> {
 	}
 
 	refresh(): void {
+		this.sliceChat()
 		this._onDidChangeTreeData.fire()
 	}
 
