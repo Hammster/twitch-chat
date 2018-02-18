@@ -45,6 +45,7 @@ export function activate(context: vscode.ExtensionContext) {
 	let streamData = getStreamData(activeChannel)
 
 	if (channel && username && oauth) {
+		console.log(channel)
 		const bot = new twitchBot({
 			username: username,
 			oauth: oauth,
@@ -52,16 +53,25 @@ export function activate(context: vscode.ExtensionContext) {
 		})
 
 		bot.on('join', () => {
+			console.log("try joining")
 			if (!joined) {
 				joined = true
+				console.log("joined")
+				
 				bot.on('message', (chatter) => {
 					twitchChatProvider.addItem(chatter)
 				})
 			}
+			console.log("===================")
 		})
 
 		bot.on('error', err => {
 			vscode.window.showErrorMessage(err)
+		})
+
+		bot.on('part', (chatter) => {
+			bot.join(activeChannel)
+			streamData = getStreamData(activeChannel)
 		})
 
 		twitchChatEventEmitter.on('streamDataUpdate', (newStreamData) => {
@@ -74,6 +84,7 @@ export function activate(context: vscode.ExtensionContext) {
 					bot.say(message)
 					twitchChatProvider.addItem({ message: message, username: username })
 				}
+				console.log("===================")
 			})
 		})
 
@@ -81,9 +92,7 @@ export function activate(context: vscode.ExtensionContext) {
 			vscode.window.showInputBox({ prompt: 'Enter a channelname' }).then((newChannel) => {
 				if (newChannel) {
 					bot.part(channel)
-					bot.join(newChannel)
 					activeChannel = newChannel
-					streamData = getStreamData(newChannel)
 				}
 			})
 		})
